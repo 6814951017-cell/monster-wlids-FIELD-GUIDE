@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>เข้าสู่ระบบ</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .login-container{max-width:360px;margin:80px auto;padding:20px;border:1px solid #ddd;border-radius:8px;background:#fff}
+    .login-container h1{margin-bottom:16px;font-size:1.4rem;text-align:center}
+    .login-container label{display:block;margin-top:8px}
+    .login-container input{width:100%;padding:8px;margin-top:4px;box-sizing:border-box}
+    .login-container button{margin-top:12px;padding:10px;width:100%}
+    #msg{margin-top:10px;color:#d00;font-size:0.95rem;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>เข้าสู่ระบบ</h1>
+    <div id="forms">
+      <form id="loginForm">
+        <label for="email">อีเมล</label>
+        <input id="email" name="email" type="email" required>
+
+        <label for="password">รหัสผ่าน</label>
+        <input id="password" name="password" type="password" required>
+
+        <button type="submit">เข้าสู่ระบบ</button>
+        <div id="msg" role="status" aria-live="polite"></div>
+        <p style="text-align:center;margin-top:8px">ยังไม่มีบัญชี? <a href="#" id="showRegister">สมัครสมาชิก</a></p>
+      </form>
+
+      <form id="registerForm" style="display:none">
+        <label for="name">ชื่อ</label>
+        <input id="name" name="name" type="text" required>
+
+        <label for="regEmail">อีเมล</label>
+        <input id="regEmail" name="email" type="email" required>
+
+        <label for="regPassword">รหัสผ่าน</label>
+        <input id="regPassword" name="password" type="password" required>
+
+        <label for="regPasswordConfirm">ยืนยันรหัสผ่าน</label>
+        <input id="regPasswordConfirm" name="passwordConfirm" type="password" required>
+
+        <button type="submit">สมัครสมาชิก</button>
+        <div id="regMsg" role="status" aria-live="polite"></div>
+        <p style="text-align:center;margin-top:8px">มีบัญชีแล้ว? <a href="#" id="showLogin">กลับไปล็อกอิน</a></p>
+      </form>
+    </div>
+  </div>
+  <script src="login.js"></script>
+</body>
+</html>
