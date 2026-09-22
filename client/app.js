@@ -1,4 +1,4 @@
-const API_URL = window.localStorage.getItem("apiUrl") || "http://localhost:5000/api";
+const API_URL = window.localStorage.getItem("apiUrl") || "/api";
 const state = { resource: "monsters", game: "", query: "", page: 1, pages: 1 };
 const results = document.querySelector("#results");
 const status = document.querySelector("#status");
@@ -60,7 +60,7 @@ async function loadEntries(append = false) {
     loadMore.hidden = state.page >= state.pages;
     status.textContent = `${pagination.total} ${state.resource} found`;
   } catch (error) {
-    results.innerHTML = `<div class="empty"><b>Could not reach the API.</b><br />Start the server at <code>http://localhost:5000</code>, then refresh this page.</div>`;
+    results.innerHTML = `<div class="empty"><b>Could not reach the API.</b><br />Check the deployed backend and refresh this page.</div>`;
     status.textContent = error.message;
     loadMore.hidden = true;
   }
