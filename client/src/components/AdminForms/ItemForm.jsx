@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+import ImageUpload from '../ImageUpload'
 
 export default function ItemForm({ entry = null, onSaved, onClose }) {
   const [games, setGames] = useState([])
   const [form, setForm] = useState({ game: '', name: '', slug: '', category: 'material', rarity: 1, description: '', icon: '', sellPrice: 0 })
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => { fetch('/api/games?limit=200').then(r => r.ok ? r.json() : Promise.reject()).then(j => setGames(j.data || [])).catch(() => {}) }, [])
@@ -32,7 +34,7 @@ export default function ItemForm({ entry = null, onSaved, onClose }) {
   }
 
   return <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4">
-    <form onSubmit={submit} className="max-w-2xl w-full bg-white p-6">
+    <form onSubmit={submit} className="max-w-2xl w-full bg-white p-6 text-[#18231d]">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-bold">{entry ? 'Edit' : 'Create'} Item</h3>
         <button type="button" onClick={onClose} className="text-sm">Close</button>
@@ -53,13 +55,13 @@ export default function ItemForm({ entry = null, onSaved, onClose }) {
           <label className="block"><span className="text-sm font-bold">Rarity</span><input type="number" min="1" max="12" value={form.rarity} onChange={update('rarity')} className="mt-1 w-full border px-2 py-2" /></label>
         </div>
         <label className="block"><span className="text-sm font-bold">Description</span><textarea value={form.description} onChange={update('description')} className="mt-1 w-full border px-2 py-2" /></label>
+        <ImageUpload label="Icon" folder="items" value={form.icon} onChange={(url) => setForm((s) => ({ ...s, icon: url }))} onBusyChange={setUploading} />
         <div className="grid grid-cols-2 gap-3">
-          <label className="block"><span className="text-sm font-bold">Icon URL</span><input value={form.icon} onChange={update('icon')} className="mt-1 w-full border px-2 py-2" /></label>
           <label className="block"><span className="text-sm font-bold">Sell Price</span><input type="number" min="0" value={form.sellPrice} onChange={update('sellPrice')} className="mt-1 w-full border px-2 py-2" /></label>
         </div>
       </div>
       {error && <p className="mt-3 text-red-600">{error}</p>}
-      <div className="mt-4 flex gap-2"><button disabled={loading} className="bg-blue-600 text-white px-4 py-2">{loading ? 'Saving…' : 'Save'}</button><button type="button" onClick={onClose} className="px-4 py-2">Cancel</button></div>
+      <div className="mt-4 flex gap-2"><button disabled={loading || uploading} className="bg-blue-600 text-white px-4 py-2 disabled:opacity-60">{loading ? 'Saving…' : 'Save'}</button><button type="button" onClick={onClose} className="px-4 py-2">Cancel</button></div>
     </form>
   </div>
 }

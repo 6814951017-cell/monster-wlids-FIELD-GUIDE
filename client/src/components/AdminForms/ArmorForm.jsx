@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
+import ImageUpload from '../ImageUpload'
 
 export default function ArmorForm({ entry = null, onSaved, onClose }) {
   const [games, setGames] = useState([])
   const [form, setForm] = useState({ game: '', setName: '', slug: '', rank: 'low', rarity: 1, image: '' })
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => { fetch('/api/games?limit=200').then(r => r.ok ? r.json() : Promise.reject()).then(j => setGames(j.data || [])).catch(() => {}) }, [])
@@ -35,7 +37,7 @@ export default function ArmorForm({ entry = null, onSaved, onClose }) {
   }
 
   return <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4">
-    <form onSubmit={submit} className="max-w-2xl w-full bg-white p-6">
+    <form onSubmit={submit} className="max-w-2xl w-full bg-white p-6 text-[#18231d]">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-bold">{entry ? 'Edit' : 'Create'} Armor</h3>
         <button type="button" onClick={onClose} className="text-sm">Close</button>
@@ -53,10 +55,10 @@ export default function ArmorForm({ entry = null, onSaved, onClose }) {
           </label>
           <label className="block"><span className="text-sm font-bold">Rarity</span><input type="number" min="1" max="12" value={form.rarity} onChange={update('rarity')} className="mt-1 w-full border px-2 py-2" /></label>
         </div>
-        <label className="block"><span className="text-sm font-bold">Image URL</span><input value={form.image} onChange={update('image')} className="mt-1 w-full border px-2 py-2" /></label>
+        <ImageUpload label="Image" folder="armors" value={form.image} onChange={(url) => setForm((s) => ({ ...s, image: url }))} onBusyChange={setUploading} />
       </div>
       {error && <p className="mt-3 text-red-600">{error}</p>}
-      <div className="mt-4 flex gap-2"><button disabled={loading} className="bg-blue-600 text-white px-4 py-2">{loading ? 'Saving…' : 'Save'}</button><button type="button" onClick={onClose} className="px-4 py-2">Cancel</button></div>
+      <div className="mt-4 flex gap-2"><button disabled={loading || uploading} className="bg-blue-600 text-white px-4 py-2 disabled:opacity-60">{loading ? 'Saving…' : 'Save'}</button><button type="button" onClick={onClose} className="px-4 py-2">Cancel</button></div>
     </form>
   </div>
 }

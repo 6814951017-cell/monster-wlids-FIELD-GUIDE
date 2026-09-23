@@ -1,8 +1,11 @@
 node_modules/
+dist/
 .env
 .env.*
-client/dist/
+!.env.example
+.vercel
 server/.env
 server/.env.*
+!server/.env.example
 api/.env
 api/.env.*

@@ -1,26 +1,14 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
-      "src": "api/index.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/dist/$1"
-    }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "MONGOMS_DISABLE_POSTINSTALL=1 npm install --include=dev",
+  "buildCommand": "npm run build",
+  "outputDirectory": "client/dist",
+  "functions": {
+    "api/index.js": { "maxDuration": 30 }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

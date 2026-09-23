@@ -29,24 +29,26 @@ nav a { color:rgba(255,255,250,0.9); font-size:12px; font-weight:700; letter-spa
 .hero-mark { text-align:center; margin-right:9%; transform:rotate(-8deg); }
 .monster-sigil { display:none; }
 
-/* Dark theme contrast overrides: make small/faded text more readable */
-.min-h-screen .text-sm,
-.min-h-screen .text-xs,
-.min-h-screen label,
-.min-h-screen p,
-.min-h-screen small {
+/* Dark theme contrast overrides: make small/faded text more readable.
+   Scoped to .theme-dark (the Home page) so light surfaces such as the
+   login card and admin panel keep their dark text. */
+.theme-dark .text-sm,
+.theme-dark .text-xs,
+.theme-dark label,
+.theme-dark p,
+.theme-dark small {
 	color: #e6efe9 !important;
 }
 
 /* Modal/detail labels */
-.fixed ul li b,
-.fixed .mr-3 {
+.theme-dark .fixed ul li b,
+.theme-dark .fixed .mr-3 {
 	color: #e6efe9 !important;
 }
 
 /* Input placeholder contrast */
-.min-h-screen input::placeholder,
-.min-h-screen textarea::placeholder {
+.theme-dark input::placeholder,
+.theme-dark textarea::placeholder {
 	color: rgba(230,239,233,0.85) !important;
 }
 .hero-mark p { font:700 10px/1.4 "Barlow Condensed"; letter-spacing:2px; color:var(--leaf); }

@@ -62,7 +62,7 @@ export default function Home({ onLogout }) {
   const detailFields = selected && Object.entries(selected).filter(([key, value]) => !['_id', '__v', 'createdAt', 'updatedAt', 'image', 'game', 'slug'].includes(key) && value !== undefined && value !== null && value !== '')
   const formatValue = (value) => Array.isArray(value) ? value.map((item) => typeof item === 'object' ? item.name || item.setName || item.element || JSON.stringify(item) : item).join(', ') : typeof value === 'object' ? value.name || value.setName || JSON.stringify(value) : String(value)
 
-  return <div className="min-h-screen bg-[#0b0f0e] font-sans text-[#e6efe9]">
+  return <><div className="theme-dark min-h-screen bg-[#0b0f0e] font-sans text-[#e6efe9]">
     <header className="sticky top-0 z-20 border-b border-[#0f1a16] bg-[#07100e] px-[7vw]"><div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between">
       <a href="#top" className="font-bold leading-3 tracking-wider" aria-label="Hunter's Field Guide home"><span className="mr-2 text-xl text-[#e95e31]">◆</span>HUNTER'S<br />FIELD GUIDE</a>
     <nav className="hidden gap-7 text-xs font-bold tracking-[.15em] md:flex" aria-label="Main navigation"><a href="#database" className="transition hover:text-[#e95e31]">DATABASE</a><a href="#about" className="transition hover:text-[#e95e31]">ABOUT</a><button onClick={onLogout} className="transition hover:text-[#e95e31]">LOG OUT</button><button onClick={() => setAdminOpen(true)} className="transition hover:text-[#e95e31]">ADMIN</button></nav>
@@ -79,6 +79,7 @@ export default function Home({ onLogout }) {
       </section>
       </main>
     {selected && <div className="fixed inset-0 z-30 grid place-items-center bg-[#000000]/70 p-4" role="dialog" aria-modal="true" aria-label="Entry detail" onMouseDown={(event) => event.target === event.currentTarget && setSelected(null)}><div className="relative max-h-[85vh] w-full max-w-xl overflow-y-auto bg-[#07100e] p-8 shadow-2xl"><button onClick={() => setSelected(null)} className="absolute right-4 top-2 text-3xl leading-none" aria-label="Close">×</button><p className="text-xs font-bold uppercase tracking-[.2em] text-[#e95e31]">{resource.slice(0, -1)}</p><h2 className="mt-3 pr-8 text-4xl font-black uppercase leading-none">{nameOf(selected)}</h2><ul className="mt-6">{detailFields.map(([key, value]) => <li key={key} className="border-t border-[#21302a] py-2 text-sm"><b className="mr-3 inline-block min-w-28 capitalize text-[#9aa196]">{titleCase(key)}</b>{formatValue(value)}</li>)}</ul></div></div>}
-    {adminOpen && <AdminPanel onClose={() => setAdminOpen(false)} />}
   </div>
+  {adminOpen && <AdminPanel onClose={() => setAdminOpen(false)} />}
+  </>
 }

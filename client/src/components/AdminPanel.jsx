@@ -35,7 +35,7 @@ export default function AdminPanel({ onClose }) {
   const onSaved = (saved) => { fetchList() }
 
   return <div className="fixed inset-0 z-50 grid place-items-start overflow-auto bg-black/40 p-6">
-    <div className="w-full max-w-5xl bg-white p-6">
+    <div className="w-full max-w-5xl bg-white p-6 text-[#18231d]">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-xl font-bold">Admin — Resources</h2>
         <div className="flex gap-2">

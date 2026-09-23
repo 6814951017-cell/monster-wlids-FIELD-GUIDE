@@ -33,7 +33,7 @@ export default function QuestForm({ entry = null, onSaved, onClose }) {
   }
 
   return <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4">
-    <form onSubmit={submit} className="max-w-2xl w-full bg-white p-6">
+    <form onSubmit={submit} className="max-w-2xl w-full bg-white p-6 text-[#18231d]">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-bold">{entry ? 'Edit' : 'Create'} Quest</h3>
         <button type="button" onClick={onClose} className="text-sm">Close</button>
