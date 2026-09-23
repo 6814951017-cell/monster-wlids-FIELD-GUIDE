@@ -37,8 +37,8 @@ test('create and update item resource', async () => {
 
 test('delete item resource', async () => {
   const game = await Game.create({ title: 'Delete Game', slug: 'delete-game' })
-  const admin = await User.create({ name: 'Admin', gmail: 'admin@example.com', password: 'x', role: 'admin' })
-  const token = jwt.sign({ id: admin._id, name: admin.name, gmail: admin.gmail }, JWT_SECRET)
+  const admin = await User.create({ name: 'Admin', email: 'admin@example.com', password: 'x', role: 'admin' })
+  const token = jwt.sign({ id: admin._1d, name: admin.name, email: admin.email }, JWT_SECRET)
   const res = await request(app).post('/api/items').send({ game: game._id.toString(), name: 'Delete Item', slug: 'delete-item', category: 'material', rarity: 1 })
   expect(res.statusCode).toBe(201)
   const id = res.body._id
@@ -50,8 +50,8 @@ test('delete item resource', async () => {
 
 test('create and delete monster resource', async () => {
   const game = await Game.create({ title: 'Monster Game', slug: 'monster-game' })
-  const admin = await User.create({ name: 'Admin2', gmail: 'admin2@example.com', password: 'x', role: 'admin' })
-  const token = jwt.sign({ id: admin._id, name: admin.name, gmail: admin.gmail }, JWT_SECRET)
+  const admin = await User.create({ name: 'Admin2', email: 'admin2@example.com', password: 'x', role: 'admin' })
+  const token = jwt.sign({ id: admin._id, name: admin.name, email: admin.email }, JWT_SECRET)
   const res = await request(app).post('/api/monsters').send({ game: game._id.toString(), name: 'Delete Monster', slug: 'delete-monster', classification: 'large' })
   expect(res.statusCode).toBe(201)
   const id = res.body._id

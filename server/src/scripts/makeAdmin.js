@@ -12,14 +12,14 @@ if (!email) {
 
 async function run() {
   await mongoose.connect(MONGO_URI)
-  const user = await User.findOne({ gmail: email })
+    const user = await User.findOne({ email: email })
   if (!user) {
     console.error('No user found with email', email)
     process.exit(1)
   }
   user.role = 'admin'
   await user.save()
-  console.log('User promoted to admin:', user.gmail)
+    console.log('User promoted to admin:', user.email)
   await mongoose.disconnect()
 }
 
