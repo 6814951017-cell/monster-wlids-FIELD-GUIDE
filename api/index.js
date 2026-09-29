@@ -13,5 +13,16 @@ module.exports = async (req, res) => {
     console.error("Database unavailable:", error.message);
     return res.status(503).json({ message: `Database unavailable: ${error.message}` });
   }
+
+  // The Vercel rewrite sends every API request through this single function.
+  // Restore the original Express path from the rewrite query parameter.
+  const rewrittenUrl = new URL(req.url, "http://vercel.local");
+  const apiPath = rewrittenUrl.searchParams.get("__apiPath");
+  if (apiPath !== null) {
+    rewrittenUrl.searchParams.delete("__apiPath");
+    const query = rewrittenUrl.searchParams.toString();
+    req.url = `/api/${apiPath}${query ? `?${query}` : ""}`;
+  }
+
   return app(req, res);
 };

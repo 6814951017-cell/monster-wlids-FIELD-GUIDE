@@ -14,13 +14,12 @@ export default function Login({ onLogin }) {
     if (isRegistering && form.password.length < 6) return setMessage('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร')
     setLoading(true); setMessage('')
     try {
-      const API_BASE = import.meta.env.VITE_API_BASE || ''
-      const url = `${API_BASE}/api/${isRegistering ? 'register' : 'login'}`
+      const url = `/api/${isRegistering ? 'register' : 'login'}`
       const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(isRegistering ? { name: form.name, email: form.email, password: form.password } : { email: form.email, password: form.password }) })
       const data = await response.json().catch(() => ({}))
       if (response.ok && data.token) onLogin(data.token)
       else if (response.ok) { setMode('login'); setMessage('สมัครสมาชิกเรียบร้อย กรุณาเข้าสู่ระบบ') }
-      else setMessage(data.message || (isRegistering ? 'สมัครสมาชิกไม่สำเร็จ' : 'เข้าสู่ระบบไม่สำเร็จ'))
+      else setMessage(data.message || `${isRegistering ? 'Registration' : 'Login'} failed (HTTP ${response.status})`)
     } catch { setMessage('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้') } finally { setLoading(false) }
   }
 
