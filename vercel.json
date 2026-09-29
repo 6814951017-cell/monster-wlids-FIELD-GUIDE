@@ -3,7 +3,7 @@
   "framework": null,
   "installCommand": "MONGOMS_DISABLE_POSTINSTALL=1 npm install --include=dev",
   "buildCommand": "npm run build",
-  "outputDirectory": "client/dist",
+  "outputDirectory": "dist",
   "functions": {
     "api/index.js": { "maxDuration": 30 }
   },

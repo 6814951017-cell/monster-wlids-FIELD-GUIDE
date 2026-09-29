@@ -114,6 +114,12 @@ footer { display:flex; justify-content:space-between; padding:22px 7vw; backgrou
 .wiki-nav { display:flex; align-items:center; gap:10px; }
 .wiki-nav a,.wiki-nav button { padding:10px 16px; border:1px solid rgba(255,255,255,.08); border-radius:7px; background:#17191a; color:#f0eee8; font-size:11px; font-weight:700; letter-spacing:.06em; text-decoration:none; transition:background .15s,color .15s; }
 .wiki-nav a:hover,.wiki-nav button:hover { background:#d8bb75; color:#17191a; }
+.wiki-search { display:flex; min-width:0; width:min(34vw,420px); height:40px; align-items:center; margin:0 22px; overflow:hidden; border-radius:8px; background:#f1f2f1; color:#202426; }
+.wiki-search > span { padding:0 12px; color:#273238; font-size:24px; line-height:1; }
+.wiki-search input { width:100%; min-width:0; border:0; outline:0; background:transparent; color:#25292b; font-size:13px; }
+.wiki-search input::placeholder { color:#737a7d !important; }
+.wiki-search button { align-self:stretch; padding:0 18px; background:#d9bd79; color:#17191a; font-size:12px; font-weight:800; }
+.wiki-search button:hover { background:#eccf83; }
 .wiki-category-nav { background:linear-gradient(180deg,#22272b,#32393e); border-bottom:1px solid rgba(255,255,255,.08); }
 .wiki-category-nav > div { display:flex; max-width:1440px; min-height:68px; align-items:center; gap:10px; margin:auto; padding:12px 5vw; }
 .wiki-category-nav a { padding:10px 17px; border:1px solid rgba(255,255,255,.08); border-radius:7px; background:#151718; color:#f2eee4; font-size:12px; font-weight:700; text-decoration:none; }
@@ -133,4 +139,10 @@ footer { display:flex; justify-content:space-between; padding:22px 7vw; backgrou
   .wiki-category-nav a { flex:none; padding:9px 12px; font-size:11px; }
   .wiki-hero { min-height:250px; padding:42px 7vw; }
   .wiki-content-panel { width:calc(100% - 28px); margin-top:14px; padding:23px 18px; }
+}
+@media (max-width:560px) {
+  .wiki-search { margin:0 8px; height:36px; }
+  .wiki-search > span { padding:0 7px; font-size:20px; }
+  .wiki-search button { padding:0 9px; font-size:10px; }
+  .wiki-search input { font-size:11px; }
 }
