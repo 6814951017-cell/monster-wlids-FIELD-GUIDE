@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react'
 export default function QuestForm({ entry = null, onSaved, onClose }) {
   const [games, setGames] = useState([])
   const [locations, setLocations] = useState([])
-  const [form, setForm] = useState({ game: '', title: '', slug: '', rank: 'low', questType: 'hunt', stars: 1, location: '' })
+  const [form, setForm] = useState({ game: '', title: '', slug: '', rank: 'low', questType: 'investigation', stars: 1, location: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => { fetch('/api/games?limit=200').then(r => r.ok ? r.json() : Promise.reject()).then(j => setGames(j.data || [])).catch(() => {}) }, [])
   useEffect(() => { fetch('/api/locations?limit=200').then(r => r.ok ? r.json() : Promise.reject()).then(j => setLocations(j.data || [])).catch(() => {}) }, [])
-  useEffect(() => { if (entry) setForm({ game: entry.game || '', title: entry.title || entry.name || '', slug: entry.slug || '', rank: entry.rank || 'low', questType: entry.questType || 'hunt', stars: entry.stars ?? 1, location: entry.location || '' }) }, [entry])
+  useEffect(() => { if (entry) setForm({ game: entry.game?._id || entry.game || '', title: entry.name || entry.title || '', slug: entry.slug || '', rank: entry.rank || 'low', questType: entry.questType || 'investigation', stars: entry.stars ?? 1, location: entry.location?._id || entry.location || '' }) }, [entry])
   useEffect(() => {
     if (!entry && games.length === 1 && !form.game) setForm((s) => ({ ...s, game: games[0]._id }))
   }, [games, entry])
@@ -22,10 +22,12 @@ export default function QuestForm({ entry = null, onSaved, onClose }) {
     try {
       const method = entry ? 'PATCH' : 'POST'
       const url = entry ? `/api/quests/${entry._id}` : '/api/quests'
-      const payload = { ...form }
+      const { title, location, ...rest } = form
+      const payload = { ...rest, name: title }
       // omit game when not provided (allow creation without a Game)
       if (!payload.game) delete payload.game
-      if (!payload.slug && payload.title) payload.slug = (payload.title || payload.name || '').toLowerCase().replaceAll(' ', '-').replace(/[^a-z0-9\-]/g, '')
+      if (location) payload.location = location
+      if (!payload.slug && payload.name) payload.slug = payload.name.toLowerCase().replaceAll(' ', '-').replace(/[^a-z0-9\-]/g, '')
       const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }, body: JSON.stringify(payload) })
       const body = await res.json().catch(() => ({}))
       if (res.ok) { onSaved && onSaved(body); onClose && onClose() } else setError(body.message || `Request failed (${res.status})`)
@@ -51,9 +53,12 @@ export default function QuestForm({ entry = null, onSaved, onClose }) {
           </label>
           <label className="block"><span className="text-sm font-bold">Quest Type</span>
             <select value={form.questType} onChange={update('questType')} className="mt-1 w-full border px-2 py-2">
-              <option value="hunt">hunt</option>
-              <option value="capture">capture</option>
-              <option value="gather">gather</option>
+              <option value="assigned">assigned</option>
+              <option value="optional">optional</option>
+              <option value="event">event</option>
+              <option value="investigation">investigation</option>
+              <option value="arena">arena</option>
+              <option value="expedition">expedition</option>
             </select>
           </label>
         </div>
