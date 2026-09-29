@@ -3,12 +3,23 @@ import { useEffect, useState } from 'react'
 export default function QuestForm({ entry = null, onSaved, onClose }) {
   const [games, setGames] = useState([])
   const [locations, setLocations] = useState([])
+  const [locationsError, setLocationsError] = useState('')
+  const [locationsLoaded, setLocationsLoaded] = useState(false)
   const [form, setForm] = useState({ game: '', title: '', slug: '', rank: 'low', questType: 'investigation', stars: 1, location: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => { fetch('/api/games?limit=200').then(r => r.ok ? r.json() : Promise.reject()).then(j => setGames(j.data || [])).catch(() => {}) }, [])
-  useEffect(() => { fetch('/api/locations?limit=200').then(r => r.ok ? r.json() : Promise.reject()).then(j => setLocations(j.data || [])).catch(() => {}) }, [])
+  useEffect(() => {
+    fetch('/api/locations?limit=200')
+      .then(async (r) => {
+        const body = await r.json().catch(() => ({}))
+        if (!r.ok) throw new Error(body.message || `Request failed (${r.status})`)
+        setLocations(body.data || [])
+      })
+      .catch((err) => setLocationsError(`Could not load locations: ${err.message}`))
+      .finally(() => setLocationsLoaded(true))
+  }, [])
   useEffect(() => { if (entry) setForm({ game: entry.game?._id || entry.game || '', title: entry.name || entry.title || '', slug: entry.slug || '', rank: entry.rank || 'low', questType: entry.questType || 'investigation', stars: entry.stars ?? 1, location: entry.location?._id || entry.location || '' }) }, [entry])
   useEffect(() => {
     if (!entry && games.length === 1 && !form.game) setForm((s) => ({ ...s, game: games[0]._id }))
@@ -69,6 +80,8 @@ export default function QuestForm({ entry = null, onSaved, onClose }) {
               <option value="">Select a location</option>
               {locations.map(l => <option key={l._id} value={l._id}>{l.name || l.title || l.slug}</option>)}
             </select>
+            {locationsError && <span className="mt-1 block text-sm text-red-600">{locationsError}</span>}
+            {!locationsError && locationsLoaded && locations.length === 0 && <span className="mt-1 block text-sm text-amber-700">No locations found. The database has not been seeded yet.</span>}
           </label>
         </div>
       </div>

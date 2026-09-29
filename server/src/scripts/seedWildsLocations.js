@@ -10,17 +10,33 @@ const wildsLocations = [
 ];
 
 async function seedWildsLocations() {
-  const game = await Game.findOneAndUpdate(
-    { slug: "monster-hunter-wilds" },
-    { $setOnInsert: { title: "Monster Hunter Wilds", slug: "monster-hunter-wilds" } },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
-  );
+  let game;
+  try {
+    game = await Game.findOneAndUpdate(
+      { slug: "monster-hunter-wilds" },
+      { $setOnInsert: { title: "Monster Hunter Wilds", slug: "monster-hunter-wilds" } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+  } catch (error) {
+    // Another serverless instance may create the unique game slug at the same time.
+    if (error.code !== 11000) throw error;
+    game = await Game.findOne({ slug: "monster-hunter-wilds" });
+    if (!game) throw error;
+  }
 
-  await Promise.all(wildsLocations.map(({ name, slug }) => Location.updateOne(
+  await Promise.allSettled(wildsLocations.map(({ name, slug }) => Location.updateOne(
     { game: game._id, slug },
     { $setOnInsert: { game: game._id, name, slug, type: "locale" } },
     { upsert: true }
   )));
+
+  // Concurrent cold starts can race on the unique (game, slug) index. Confirm
+  // that every requested document exists before treating those races as safe.
+  const slugs = wildsLocations.map(({ slug }) => slug);
+  const seeded = await Location.countDocuments({ game: game._id, slug: { $in: slugs } });
+  if (seeded !== wildsLocations.length) {
+    throw new Error(`Only ${seeded} of ${wildsLocations.length} Monster Hunter Wilds locations are present`);
+  }
 
   console.log(`Ensured ${wildsLocations.length} Monster Hunter Wilds locations`);
 }
