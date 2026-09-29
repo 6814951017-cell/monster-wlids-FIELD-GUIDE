@@ -14,7 +14,10 @@ const questSchema = new mongoose.Schema(
     questType: { type: String, enum: ["assigned", "optional", "event", "investigation", "arena", "expedition"], required: true },
     rank: { type: String, enum: ["low", "high", "master"], required: true },
     stars: { type: Number, min: 1, max: 10 },
-    location: { type: mongoose.Schema.Types.ObjectId, ref: "Location" },
+    location: {
+      type: String,
+      enum: ["Windward Plains", "Scarlet Forest", "Oilwell Basin", "Iceshard Cliffs", "Ruins of Wyveria"],
+    },
     targets: [targetSchema],
     timeLimitMinutes: { type: Number, min: 1 },
     rewardZenny: { type: Number, min: 0 },

@@ -75,7 +75,7 @@ app.use("/api/items", createResourceRoutes(createResourceController({ Model: Ite
 app.use("/api/weapons", createResourceRoutes(createResourceController({ Model: Weapon, filterFields: ["game", "weaponType", "rarity"], populate: ["game", "parentWeapon", "materials.item"] })));
 app.use("/api/armors", createResourceRoutes(createResourceController({ Model: Armor, filterFields: ["game", "rank", "rarity"], populate: ["game", "pieces.skills.skill", "pieces.materials.item"] })));
 app.use("/api/skills", createResourceRoutes(createResourceController({ Model: Skill, filterFields: ["game", "category"] })));
-app.use("/api/quests", createResourceRoutes(createResourceController({ Model: Quest, filterFields: ["game", "rank", "questType", "stars"], populate: ["game", "location", "targets.monster", "rewards.item"] })));
+app.use("/api/quests", createResourceRoutes(createResourceController({ Model: Quest, filterFields: ["game", "rank", "questType", "stars"], populate: ["game", "targets.monster", "rewards.item"] })));
 
 // 3. Error handling — must be LAST
 app.use(notFound);
