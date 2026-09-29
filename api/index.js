@@ -1,6 +1,9 @@
 // Vercel serverless entry: every /api/* request is rewritten here (see vercel.json).
 const app = require("../server/src/app");
 const connectDB = require("../server/src/config/db");
+const seedWildsLocations = require("../server/src/scripts/seedWildsLocations");
+
+let locationsSeedPromise;
 
 module.exports = async (req, res) => {
   // OIDC-connected Blob stores: make the per-request token visible to the SDK.
@@ -9,9 +12,13 @@ module.exports = async (req, res) => {
 
   try {
     await connectDB();
+    // Seed once per warm serverless instance; the upserts make retries safe.
+    if (!locationsSeedPromise) locationsSeedPromise = seedWildsLocations();
+    await locationsSeedPromise;
   } catch (error) {
-    console.error("Database unavailable:", error.message);
-    return res.status(503).json({ message: `Database unavailable: ${error.message}` });
+    locationsSeedPromise = null;
+    console.error("Database initialization failed:", error.message);
+    return res.status(503).json({ message: `Database initialization failed: ${error.message}` });
   }
   return app(req, res);
 };
