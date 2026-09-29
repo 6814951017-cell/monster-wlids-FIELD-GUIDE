@@ -98,3 +98,39 @@ footer { display:flex; justify-content:space-between; padding:22px 7vw; backgrou
 /* Icon bar removed per user request */
 @media (max-width:780px) { .site-header { padding:0 6vw; } nav { display:none; }.menu-button { display:block; }.hero { min-height:500px; padding:62px 8vw; }.hero-mark { position:absolute; right:-55px; bottom:18px; opacity:.8; }.section-heading { align-items:start; gap:20px; flex-direction:column; }.controls { align-items:stretch; flex-direction:column; }.search,.search input { width:100%; }.card-grid { grid-template-columns:repeat(2,1fr); }.about { display:block; }.about p:last-child { margin-top:28px; } }
 @media (max-width:440px) { .card-grid { grid-template-columns:1fr; }.database { padding:62px 5vw; }.hero h1 { font-size:65px; }.section-heading h2,.about h2 { font-size:47px; } }
+
+/* Monster Hunter wiki inspired shell, with the ad columns removed. */
+.theme-dark {
+  background: linear-gradient(180deg, rgba(10,13,15,.35), rgba(8,10,12,.82) 430px, rgba(8,10,12,.96)),
+    url('https://cdn.oneesports.gg/wp-content/uploads/sites/3/2024/10/monster-hunter-wilds-pc-game-ste-2.jpg') center top / 100% auto no-repeat,
+    #0b0f11;
+}
+.wiki-header { background: #292b2d; border-bottom: 1px solid rgba(255,255,255,.13); box-shadow: 0 3px 18px rgba(0,0,0,.35); }
+.wiki-brand { display:flex; align-items:center; gap:10px; color:#f4f0e8; text-decoration:none; line-height:1; }
+.wiki-brand-mark { display:grid; width:40px; height:40px; place-items:center; border:1px solid #c2a45e; border-radius:50%; color:#e4c478; font:800 14px/1 "Barlow Condensed",sans-serif; letter-spacing:-1px; }
+.wiki-brand small,.wiki-brand b { display:block; }
+.wiki-brand small { color:#c9c4b7; font:600 9px/1.2 "Barlow Condensed",sans-serif; letter-spacing:2px; }
+.wiki-brand b { margin-top:4px; font:700 15px/1 "Barlow Condensed",sans-serif; letter-spacing:1.5px; }
+.wiki-nav { display:flex; align-items:center; gap:10px; }
+.wiki-nav a,.wiki-nav button { padding:10px 16px; border:1px solid rgba(255,255,255,.08); border-radius:7px; background:#17191a; color:#f0eee8; font-size:11px; font-weight:700; letter-spacing:.06em; text-decoration:none; transition:background .15s,color .15s; }
+.wiki-nav a:hover,.wiki-nav button:hover { background:#d8bb75; color:#17191a; }
+.wiki-category-nav { background:linear-gradient(180deg,#22272b,#32393e); border-bottom:1px solid rgba(255,255,255,.08); }
+.wiki-category-nav > div { display:flex; max-width:1440px; min-height:68px; align-items:center; gap:10px; margin:auto; padding:12px 5vw; }
+.wiki-category-nav a { padding:10px 17px; border:1px solid rgba(255,255,255,.08); border-radius:7px; background:#151718; color:#f2eee4; font-size:12px; font-weight:700; text-decoration:none; }
+.wiki-category-nav a:hover { color:#efcf7d; border-color:#806b3d; }
+.wiki-hero { min-height:260px; background:linear-gradient(90deg,rgba(7,10,12,.92),rgba(7,10,12,.55) 56%,rgba(7,10,12,.16)),url('https://cdn.oneesports.gg/wp-content/uploads/sites/3/2024/10/monster-hunter-wilds-pc-game-ste-2.jpg') center 44% / cover no-repeat; }
+.wiki-hero:after { display:none; }
+.wiki-content-panel { width:calc(100% - 64px); margin-top:26px; margin-bottom:60px; border:1px solid rgba(255,255,255,.08); border-radius:15px; background:rgba(19,20,20,.97); box-shadow:0 16px 44px rgba(0,0,0,.48); }
+.wiki-crumb { color:#d6d8d9; font-size:13px; }
+.wiki-crumb a { color:#efc85f; text-decoration:none; }
+.wiki-crumb span { margin:0 9px; color:#81878a; }
+.wiki-crumb b { font-weight:400; }
+.wiki-content-panel [role="tablist"] button { border-radius:5px; }
+.wiki-content-panel [role="tablist"] button[aria-selected="true"] { background:#d4b76d; color:#171817; }
+@media (max-width:780px) {
+  .wiki-nav { display:none; }
+  .wiki-category-nav > div { overflow-x:auto; }
+  .wiki-category-nav a { flex:none; padding:9px 12px; font-size:11px; }
+  .wiki-hero { min-height:250px; padding:42px 7vw; }
+  .wiki-content-panel { width:calc(100% - 28px); margin-top:14px; padding:23px 18px; }
+}
