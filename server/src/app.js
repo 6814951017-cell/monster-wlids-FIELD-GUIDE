@@ -16,6 +16,7 @@ const Armor = require("./models/armor.model");
 const Skill = require("./models/skill.model");
 const Quest = require("./models/quest.model");
 const { notFound, errorHandler } = require("./middlewares/error.middleware");
+const { requireAdmin } = require("./middlewares/auth.middleware");
 const app = express();
 
 const streamUploadToBlob = (req) => new Promise((resolve, reject) => {
@@ -57,7 +58,7 @@ app.use(express.json({ limit: "10mb" }));
 // 2. Routes
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
-app.post("/api/upload", async (req, res, next) => {
+app.post("/api/upload", requireAdmin, async (req, res, next) => {
   try {
     const url = await streamUploadToBlob(req);
     res.status(201).json({ url });

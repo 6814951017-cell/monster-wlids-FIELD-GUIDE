@@ -29,6 +29,16 @@ export default function Home({ onLogout }) {
   const [selected, setSelected] = useState(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [adminOpen, setAdminOpen] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) return
+    fetch('/api/me', { headers: { Authorization: `Bearer ${token}` } })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((user) => setIsAdmin(user.isAdmin === true))
+      .catch(() => setIsAdmin(false))
+  }, [])
 
   const params = useMemo(() => {
     const values = new URLSearchParams({ page: String(page), limit: '12' })
@@ -66,7 +76,7 @@ export default function Home({ onLogout }) {
     <header className="wiki-header sticky top-0 z-20 px-[5vw]"><div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between">
       <a href="#top" className="font-bold leading-3 tracking-wider" aria-label="Hunter's Field Guide home"><span className="mr-2 text-xl text-[#e95e31]">◆</span>HUNTER'S<br />FIELD GUIDE</a>
       <form className="wiki-search" role="search" onSubmit={(event) => { event.preventDefault(); document.getElementById('database')?.scrollIntoView({ behavior: 'smooth' }) }}><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => { setQuery(event.target.value); setPage(1) }} type="search" aria-label="Search the database" placeholder="Search the database" /><button type="submit">Search</button></form>
-    <nav className="wiki-nav hidden xl:flex" aria-label="Main navigation"><a href="#top">HOME</a><a href="#database">DATABASE</a><a href="#database">WORLD</a><a href="#database">GUIDES</a><button onClick={() => setAdminOpen(true)}>ADMIN</button><button onClick={onLogout}>LOG OUT</button></nav>
+    <nav className="wiki-nav hidden xl:flex" aria-label="Main navigation"><a href="#top">HOME</a><a href="#database">DATABASE</a><a href="#database">WORLD</a><a href="#database">GUIDES</a>{isAdmin && <button onClick={() => setAdminOpen(true)}>ADMIN</button>}<button onClick={onLogout}>LOG OUT</button></nav>
       <button className="text-xl xl:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Open menu">☰</button>
     </div>{menuOpen && <nav className="flex flex-col gap-4 border-t border-[#0f1a16] py-4 text-xs font-bold tracking-[.15em] xl:hidden"><a href="#database" onClick={() => setMenuOpen(false)}>DATABASE</a><a href="#about" onClick={() => setMenuOpen(false)}>ABOUT</a><button className="text-left" onClick={onLogout}>LOG OUT</button></nav>}</header>
     <main id="top">

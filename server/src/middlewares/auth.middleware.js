@@ -2,6 +2,9 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user.model')
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret'
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || '6814951017@rbru.ac.th').trim().toLowerCase()
+
+const isAdminUser = (user) => user?.role === 'admin' && user.email?.trim().toLowerCase() === ADMIN_EMAIL
 
 const requireAuth = async (req, res, next) => {
   try {
@@ -21,9 +24,9 @@ const requireAdmin = async (req, res, next) => {
   try {
     if (!req.user) await requireAuth(req, res, () => {})
     if (!req.user) return
-    if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin only' })
+    if (!isAdminUser(req.user)) return res.status(403).json({ message: 'Admin only' })
     next()
   } catch (err) { next(err) }
 }
 
-module.exports = { requireAuth, requireAdmin }
+module.exports = { requireAuth, requireAdmin, isAdminUser }
